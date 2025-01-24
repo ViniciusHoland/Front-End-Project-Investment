@@ -1,6 +1,7 @@
 import "./LoginPage.css";
 import  Cash from "../../assets/Cash.png"
 import  MaoMoney from "../../assets/maoMoney.png"
+import { Link } from "react-router-dom";
 
 function LoginPage() {
   return (
@@ -19,7 +20,13 @@ function LoginPage() {
           <input type="password" placeholder="password" required />
           <button type="submit">LOGIN</button>
         </form>
-        <a href="#" className="register-link">Register</a>
+          <Link 
+            to={`/register`}
+          >
+            Register
+          </Link>
+        
+        
       </div>
     </div>
   );
