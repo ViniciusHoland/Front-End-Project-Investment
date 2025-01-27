@@ -34,7 +34,7 @@ function LoginPage() {
       if(response.status === 200){
         const token = response.data
 
-        localStorage.setItem('authToken', token)
+        localStorage.setItem('token', token)
         setErrorMessage('')
         console.log('login sucessfully',)
         navigate('/home')
