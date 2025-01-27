@@ -4,14 +4,18 @@ import  MaoMoney from "../../assets/maoMoney.png"
 import { Link } from "react-router-dom";
 import api from "../../services/api"
 import {  useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
 
   const inputUser = useRef()
   const inputPassword = useRef()
 
+  const navigate = useNavigate()
 
   async function login() {
+
+    
 
     try{
 
@@ -26,7 +30,7 @@ function LoginPage() {
       await api.post('/login',{email,password})
       
       console.log('login sucessfully')
-
+      navigate('/home')
     }catch(error){
 
       console.error('Login failed:', error.response?.data || error.message);
