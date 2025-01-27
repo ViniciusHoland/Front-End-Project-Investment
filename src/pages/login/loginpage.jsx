@@ -3,10 +3,12 @@ import  Cash from "../../assets/Cash.png"
 import  MaoMoney from "../../assets/maoMoney.png"
 import { Link } from "react-router-dom";
 import api from "../../services/api"
-import {  useRef } from "react";
+import {  useRef, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
+
+  const [errorMessage, setErrorMessage] = useState('')
 
   const inputUser = useRef()
   const inputPassword = useRef()
@@ -27,17 +29,27 @@ function LoginPage() {
         return;
       }
 
-      await api.post('/login',{email,password})
-      
-      console.log('login sucessfully')
-      navigate('/home')
+      const response = await api.post('/login',{email,password})
+
+      if(response.status === 200){
+        const token = response.data
+
+        localStorage.setItem('authToken', token)
+        setErrorMessage('')
+        console.log('login sucessfully',)
+        navigate('/home')
+      }
+     
     }catch(error){
 
-      console.error('Login failed:', error.response?.data || error.message);
-
-
+      if (error.response?.status === 404) {
+        setErrorMessage('Usuário não encontrado!');
+      } else if (error.response?.status === 401) {
+        setErrorMessage('Email ou senha inválidos!');
+      } else {
+        setErrorMessage('Erro inesperado. Tente novamente mais tarde.');
+      }
     }
-
   }
 
 
@@ -56,7 +68,13 @@ function LoginPage() {
           <input type="text" placeholder="username" ref={inputUser} required />
           <input type="password" placeholder="password" ref={inputPassword} required />
           <button type="button" onClick={login} >LOGIN</button>
+         
         </form>
+        {errorMessage && (
+             <div>
+             <p color="red">Usuario ou senha incorretos</p>
+           </div>
+          )}
         <div className="register-link">
         <Link 
             to={`/register`}
